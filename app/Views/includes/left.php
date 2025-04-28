@@ -114,6 +114,12 @@ $user_id = $this->session->get('user_id');
                         <span>Tickets</span>
                     </a>
                 </li>
+                 <li>
+                    <a href="<?php echo base_url();?>CommunityCare">
+                        <i data-feather="grid"></i>
+                        <span>Community Care</span>
+                    </a>
+                </li>
 
                 <li>
                     <a href="#sidebarPermission" data-bs-toggle="collapse">
