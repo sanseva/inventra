@@ -1,4 +1,5 @@
 <?php $this->session = \Config\Services::session(); $this->common_model = model("Common_model");$this->permissions = $this->common_model->checkPermission();?>
+ 
 <!DOCTYPE html>
 <html lang="en">
 
@@ -77,19 +78,20 @@
 
         <div class="content-page">
             <div style="padding-top:30px;padding-right:50px;" class="d-flex flex-wrap gap-2">
- 
-            <?php
+
+                <?php
                     $search_code = "TIC-ADD-01";
                     $codes = array_column($this->permissions, 'code'); 
 
                     if (in_array($search_code, $codes))
                     { ?>
-                        <button type="button" class="btn btn-primary ms-auto" data-bs-toggle="modal"
-                        data-bs-target=".bs-example-modal-center">ADD</button>
-                     
+                <button type="button" class="btn btn-primary ms-auto" data-bs-toggle="modal"
+                    data-bs-target=".bs-example-modal-center">ADD</button>
 
+                <button type="button" class="btn btn-primary  " data-bs-toggle="modal"
+                    data-bs-target=".upload-excel">IMPORT EXCEL</button>
 
-            <?php } ?>
+                <?php } ?>
 
 
                 <!-- <button type="button" class="btn btn-primary ms-auto" data-bs-toggle="modal"
@@ -116,7 +118,7 @@
                                             <input type="text" class="form-control" id="Name" name="Name"
                                                 placeholder="Enter Your Name" required>
                                         </div>
-                                        
+
                                         <div class="col-xxl-12">
                                             <label for="Date" class="form-label">Date</label>
                                             <input type="date" class="form-control" id="sdate" name="sdate" required>
@@ -139,13 +141,15 @@
 
                                         <div class="col-xxl-12">
                                             <label for="memberid" class="form-label">Member ID</label>
-                                            <input type="text" class="form-control" id="memberid" name="memberid" required>
-                                        </div>  
+                                            <input type="text" class="form-control" id="memberid" name="memberid"
+                                                required>
+                                        </div>
 
                                         <div class="col-xxl-12">
                                             <label for="claimno" class="form-label">Claim Number</label>
-                                            <input type="text" class="form-control" id="claimno" name="claimno" required>
-                                        </div>  
+                                            <input type="text" class="form-control" id="claimno" name="claimno"
+                                                required>
+                                        </div>
 
                                         <div class="col-xxl-12">
                                             <label for="dos" class="form-label">Date of Service</label>
@@ -172,6 +176,58 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div>
+
+            <div class="modal fade upload-excel" id="myModal" tabindex="-1" role="dialog"
+                aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">UPLOAD EXCEL </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-body">
+                                <form action="<?= base_url('communitycare/preview_excel') ?>" method="post"
+                                    enctype="multipart/form-data">
+                                    <div class="row g-3">
+
+                                        <div class="col-xxl-12">
+                                            <label for="Excel" class="form-label"> Upload Excel</label>
+                                            <input type="file" class="form-control" id="excel_file" name="excel_file" accept=".xls,.xlsx" required>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit">Preview</button>
+                                        </div>
+                                        <!--end col-->
+                                    </div><!-- end row -->
+                                </form> <!-- end form -->
+                            </div> <!-- end modal body -->
+                        </div>
+
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             <div class="col-md-12 col-xl-12" style="padding-top: 80px;">
                 <div class="card">
@@ -377,19 +433,21 @@
                         if (in_array($delPermission, $codes))
                         { ?>
                         buttons +=
-                        '<a id="sDeleteRetailGST" class="sDeleteRetailGST btn btn-danger btn-xs" data-id="' +
+                            '&nbsp<a id="sDeleteRetailGST" class="sDeleteRetailGST btn btn-danger btn-xs" data-id="' +
                             row.user_id + '" href="#"><i class="fa fa-times"></i></a>';
                         <?php }  if (in_array($delPermission, $codes))
                         { ?>
 
-                        
+
                         buttons +=
-                        '<a id="print" class="print btn btn-danger btn-xs" data-id="' +
-                            row.user_id + '" target="_blank" href="<?php echo base_url('CommunityCare/pdf'); ?>"><i class="fa fa-view"></i></a>';
+                            '&nbsp<a id="print" class="print btn btn-primary btn-xs" data-id="' +
+                            row.user_id +
+                            '" target="_blank" href="<?php echo base_url('CommunityCare/pdf'); ?>/' +
+                            row.user_id + '"><i class="fa fa-eye"></i></a>';
                         <?php } ?>
 
-                        return buttons; 
- 
+                        return buttons;
+
                         // Rendering buttons for edit and delete operations
                         // return '<a class="btn btn-success btn-xs"  onclick="edit(' + row
                         //     .user_id + ')"><i class="fa fa-pencil"></i></a>' +
@@ -415,7 +473,7 @@
                     dataType: 'json', // Specify that the response is expected to be JSON
                     success: function(response) {
                         console.log('Response from server:',
-                        response); // Log the entire response object
+                            response); // Log the entire response object
 
                         // Check the response status
                         if (response.status === 'success') {
@@ -431,7 +489,7 @@
                         // Handle AJAX error
                         console.error("An error occurred: " + error);
                         alert("An error occurred: " +
-                        error); // Show error message in case of failure
+                            error); // Show error message in case of failure
                     }
                 });
             }
@@ -474,7 +532,7 @@
                     data: dataToSend,
                     success: function(response) {
                         alert('Form submitted successfully! Response: ' +
-                        response); // Show the response from PHP (success or error)
+                            response); // Show the response from PHP (success or error)
                     },
                     error: function(xhr, status, error) {
                         console.error("AJAX Error: " + status + ": " + error);
@@ -487,7 +545,8 @@
                     data: dataToSend,
                     success: function(response) {
                         alert(
-                        'Data Updated successfully!'); // Show the response from PHP (success or error)
+                            'Data Updated successfully!'
+                        ); // Show the response from PHP (success or error)
                     },
                     error: function(xhr, status, error) {
                         console.error("AJAX Error: " + status + ": " + error);

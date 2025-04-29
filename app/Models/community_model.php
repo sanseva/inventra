@@ -1,6 +1,8 @@
 <?php
 namespace App\Models;
 use CodeIgniter\Model;
+use DateTime;
+
 /**
  * @author sdas
  *
@@ -125,6 +127,63 @@ class Community_model extends Model {
         return $query; 
     }
     
+    public function getcommunitydata($id) 
+    {
+        $sql   ="SELECT `id`, `name`, `date`, `pname`, `taxno`, `mname`, `memberid`, `claimno`, `dos`, `createdon`, `createdby`, `updatedon`, `updateby` FROM `community` WHERE id = ".$id;
+        $query = $this->db->query($sql)->getRowArray();
+        return $query; 
+    }
+
+    public function save_excel($excelData ) {
+         
+        $user_id = $this->session->get('user_id'); // Example key
+             // Prepare data array for insertion
+
+
+            foreach ($excelData as $index => $row) {
+                if ($index === 0) continue; // Skip header row
+                // Save each row, e.g.:
+                $excelDate = $row[1];
+                if (is_numeric($excelDate)) {
+                    $date = Date::excelToDateTimeObject($excelDate)->format('Y-m-d');
+                } else {
+                    // If it's a string like "10/30/2025", we parse it into the correct MySQL format
+                    $date = DateTime::createFromFormat('m/d/Y', $excelDate)->format('Y-m-d');
+                }
+                // echo $date;exit;
+                $excelDate1 = $row[7]; 
+                if (is_numeric($excelDate)) {
+                    $date1 = Date::excelToDateTimeObject($excelDate1)->format('Y-m-d');
+                } else {
+                    // If it's a string like "10/30/2025", we parse it into the correct MySQL format
+                    $date1 = DateTime::createFromFormat('m/d/Y', $excelDate1)->format('Y-m-d');
+                }
+
+                $data = [
+                    'name' => $row[0],
+                    'date' => $date,
+                    'pname' => $row[2],
+                    'taxno' => $row[3],
+                    'mname' => $row[4],
+                    'memberid' => $row[5],
+                    'claimno' => $row[6],
+                    'dos' => $date1,
+                   
+                ];
+
+                $builder = $this->db->table('community'); 
+  
+                $builder->insert($data);
+
+
+            }
+            
+
+
+        
+
+    }
+
    
 
 	

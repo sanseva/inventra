@@ -1,7 +1,14 @@
 <?php
 
 namespace App\Controllers;
-use TCPDF;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
+
+$options = new \Dompdf\Options();
+$options->set('isRemoteEnabled', true); // Required for local file loading
+$dompdf = new \Dompdf\Dompdf($options);
 
 class CommunityCare extends BaseController
 { 
@@ -44,9 +51,7 @@ class CommunityCare extends BaseController
     {
         header('Content-Type: application/json');
         $data = $this->community_model->getdata();
-        // echo"<pre>";
-        // print_r($data);
-        // exit;
+       
         $i=1;
         foreach ($data as $row)
         {
@@ -133,34 +138,80 @@ class CommunityCare extends BaseController
     }
 
 
-    public function pdf()
+    public function pdf($userId)
     {
-        return view('pdf_report');
+        return view('view_pdf_report',['userId' => $userId]);
     }
 
-
-    public function downloadPdf()
+    public function generatepdf()
     {
-        // Create a new PDF instance
-        $pdf = new TCPDF();
+        $id = $this->request->getGet('id');
+        $dompdf = new Dompdf();
 
-        // Set document info
-        $pdf->SetCreator('CodeIgniter');
-        $pdf->SetAuthor('Your Name');
-        $pdf->SetTitle('Sample PDF');
-        $pdf->SetSubject('PDF Generation');
+        $data['data'] = $this->community_model->getcommunitydata($id);    
+        $logo_path = 'file://' . realpath(FCPATH . 'assets/images/logo-dark.png');
 
-        // Add a page
-        $pdf->AddPage();
 
-        // Set some content for the PDF
-        $pdf->SetFont('helvetica', '', 12);
-        $pdf->Cell(0, 10, 'This is a sample PDF created in CodeIgniter.', 0, 1, 'C');
+        $data['logo_path'] = $logo_path;
+         
+        // $html = view('pdf_report'); // You can pass data if needed
+        $html = view('pdf_report', $data);
 
-        // Output the PDF to the browser
-        return $pdf->Output('sample_pdf.pdf', 'D'); // 'D' for download
+        $dompdf->loadHtml($html);
+
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Output the PDF directly in the browser
+        $dompdf->stream("claim-inquiry.pdf", ["Attachment" => false]); // set true to force download
     }
 
+    public function download_pdf()
+    {
+        $dompdf = new Dompdf();
 
+        $html = view('pdf_report');
+        $dompdf->loadHtml($html);
 
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Force download
+        return $dompdf->stream("claim-inquiry.pdf", ["Attachment" => true]);
+    }
+
+    public function preview_excel()
+    {
+        $file = $this->request->getFile('excel_file');
+        if ($file && $file->isValid()) {
+            $spreadsheet = IOFactory::load($file->getTempName());
+            $data = $spreadsheet->getActiveSheet()->toArray();
+
+            // Skip header (first row)
+            $dataWithoutHeader = array_slice($data, 1);
+
+            return view('preview_excel_view', [
+                'sheetData' => $dataWithoutHeader,
+                'rawJson'   => json_encode($data) // include full data for submission (optional)
+            ]);
+        } else {
+            return redirect()->back()->with('error', 'Invalid file uploaded.');
+        }
+    }
+
+    public function save_excel()
+    {
+        $rawData = $this->request->getPost('excel_data');
+        $excelData = json_decode($rawData, true);
+        
+        $data = $this->community_model->save_excel( $excelData);
+        
+        
+        
+    }
+
+    
+    
+
+    
 }
