@@ -197,6 +197,12 @@
                                             <input type="file" class="form-control" id="excel_file" name="excel_file" accept=".xls,.xlsx" required>
                                         </div>
 
+                                        <div class="col-xxl-12">
+                                            <a href="<?= base_url();?>assets/sampledata/sampledata.xlsx"  download > Download Sample File </a >
+                                        </div>
+
+
+
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-light"
                                                 data-bs-dismiss="modal">Close</button>
