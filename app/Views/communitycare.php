@@ -212,57 +212,36 @@
                 </div><!-- /.modal-dialog -->
             </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
             <div class="col-md-12 col-xl-12" style="padding-top: 80px;">
                 <div class="card">
                     <div class="card-header">
-                        <div class="d-flex align-items-center">
-                            <h5 class="card-title text-black mb-0">Community Care List</h5>
-                        </div>
+                        <h5 class="card-title text-black mb-0">Community Care List</h5>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2"><input type="text" id="filterContactName" class="form-control" placeholder="Contact Name"></div>
+                        <div class="col-md-2"><input type="date" id="filterDate" class="form-control"></div>
+                        <div class="col-md-2"><input type="text" id="filterProviderName" class="form-control" placeholder="Provider Name"></div>
+                        <div class="col-md-2"><input type="text" id="filterMemberName" class="form-control" placeholder="Member Name"></div>
+                        <div class="col-md-2"><input type="text" id="filterClaimNumber" class="form-control" placeholder="Claim Number"></div>
+                        <div class="col-md-2"><input type="text" id="filtercreatedby" class="form-control" placeholder="Added By"></div>
                     </div>
 
-                    <!-- Button Datatable -->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <table id="datatable-buttons"
-                                        class="table table-striped table-bordered dt-responsive nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>Sr No.</th>
-                                                <th>Contact Name</th>
-                                                <th>Date</th>
-                                                <th>Provider Name</th>
-                                                <th>Member Name</th>
-                                                <th>Claim Number</th>
-                                                <th nowrap>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="shodata">
-
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                            </div>
-                        </div>
+                    <div class="card-body">
+                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Sr No.</th>
+                                    <th>Contact Name</th>
+                                    <th>Date</th>
+                                    <th>Provider Name</th>
+                                    <th>Member Name</th>
+                                    <th>Claim Number</th>
+                                    <th>Added By</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -373,128 +352,73 @@
     <!-- <script src="assets/js/pages/datatable.init.js"></script> -->
 
     <script>
-    $(document).ready(function() {
 
-        // Initialize DataTable only if not already initialized
-        if ($.fn.dataTable.isDataTable('#datatable-buttons')) {
-            $('#datatable-buttons').DataTable().destroy(); // Destroy the current instance
-        }
-
-        // Initialize DataTable
-        var table = $('#datatable-buttons').DataTable({
-            dom: 'Bfrtip', // Button integration (optional)
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print' // Enable export buttons (optional)
-            ],
+        $(document).ready(function () {
+    function loadTable() {
+        $('#datatable-buttons').DataTable({
+            destroy: true,
+            dom: 'Bfrtip',
+            buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
             ajax: {
-                url: '<?php echo base_url();?>CommunityCare/getdata', // Replace with the server-side URL
+                url: '<?php echo base_url(); ?>CommunityCare/getdata',
+                data: {
+                    name: $('#filterContactName').val(),
+                    date: $('#filterDate').val(),
+                    pname: $('#filterProviderName').val(),
+                    mname: $('#filterMemberName').val(),
+                    claimno: $('#filterClaimNumber').val(),
+                    createdby: $('#filtercreatedby').val()
+                },
                 type: 'GET',
-                dataSrc: function(json) {
-                    // If you need to modify the data structure before adding it to the table, you can do so here
-                    return json.data;
-                }
+                dataSrc: 'data'
             },
-            columns: [{
-                    "data": "0"
-                }, // The column for Sr No.
+            columns: [
+                { data: '0' },
+                { data: '1' },
+                { data: '2' },
+                { data: '3' },
+                { data: '4' },
+                { data: '5' },
+                { data: '6' },
                 {
-                    "data": "1"
-                }, //  Contact Name
-                {
-                    "data": "2"
-                }, // Date
-                {
-                    "data": "3"
-                }, // Provider Name
-                {
-                    "data": "4"
-                }, // Member Name:
-                {
-                    "data": "5"
-                }, // Claim Number: 
-                {
-                    "data": null,
-                    "render": function(data, type, row) {
-
-
+                    data: null,
+                    render: function (data, type, row) {
                         let buttons = '';
-
-                        <?php  
-                        $editPermission  = "TIC-EDIT-02";
-                        $delPermission   = "TIC-DEL-03";
-                        $codes = array_column($this->permissions, 'code'); 
-
-                        if (in_array($editPermission, $codes))
-                        { ?>
-                        buttons += '<a class="btn btn-success btn-xs"  onclick="edit(' + row
-                            .user_id + ')"><i class="fa fa-pencil"></i></a>';
-                        <?php }  
-
-                        if (in_array($delPermission, $codes))
-                        { ?>
-                        buttons +=
-                            '&nbsp<a id="sDeleteRetailGST" class="sDeleteRetailGST btn btn-danger btn-xs" data-id="' +
-                            row.user_id + '" href="#"><i class="fa fa-times"></i></a>';
-                        <?php }  if (in_array($delPermission, $codes))
-                        { ?>
-
-
-                        buttons +=
-                            '&nbsp<a id="print" class="print btn btn-primary btn-xs" data-id="' +
-                            row.user_id +
-                            '" target="_blank" href="<?php echo base_url('CommunityCare/pdf'); ?>/' +
-                            row.user_id + '"><i class="fa fa-eye"></i></a>';
-                        <?php } ?>
-
+                        buttons += `<a class="btn btn-success btn-xs" onclick="edit(${row.user_id})"><i class="fa fa-pencil"></i></a>`;
+                        buttons += `<a class="sDeleteRetailGST btn btn-danger btn-xs" data-id="${row.user_id}" href="#"><i class="fa fa-times"></i></a>`;
+                        buttons += `<a class="print btn btn-danger btn-xs" data-id="${row.user_id}" target="_blank" href="<?php echo base_url('CommunityCare/pdf'); ?>"><i class="fa fa-eye"></i></a>`;
                         return buttons;
-
-                        // Rendering buttons for edit and delete operations
-                        // return '<a class="btn btn-success btn-xs"  onclick="edit(' + row
-                        //     .user_id + ')"><i class="fa fa-pencil"></i></a>' +
-                        //     '<a id="sDeleteRetailGST" class="sDeleteRetailGST btn btn-danger btn-xs" data-id="' +
-                        //     row.user_id + '" href="#"><i class="fa fa-times"></i></a>';
                     }
                 }
             ]
         });
+    }
 
-        // Handling Delete action (assuming there's a delete API)
-        $('#datatable-buttons').on('click', '.sDeleteRetailGST', function() {
-            var id = $(this).data('id');
+    loadTable();
 
-            // Confirm and delete the record (you can send an AJAX request to delete this record)
-            if (confirm('Are you sure you want to delete this record?')) {
-                $.ajax({
-                    url: '<?php echo base_url();?>CommunityCare/deletedata', // Server-side script for deletion
-                    method: 'POST',
-                    data: {
-                        id: id
-                    },
-                    dataType: 'json', // Specify that the response is expected to be JSON
-                    success: function(response) {
-                        console.log('Response from server:',
-                            response); // Log the entire response object
-
-                        // Check the response status
-                        if (response.status === 'success') {
-                            // Show success message
-                            alert(response.message);
-                            table.ajax.reload(); // Reload DataTable to reflect changes
-                        } else {
-                            // Show error message
-                            alert(response.message);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle AJAX error
-                        console.error("An error occurred: " + error);
-                        alert("An error occurred: " +
-                            error); // Show error message in case of failure
-                    }
-                });
-            }
+    // Bind filter events
+    $('#filterContactName, #filterDate, #filterProviderName, #filterMemberName, #filterClaimNumber, #filtercreatedby')
+        .on('keyup change', function () {
+            loadTable();
         });
+
+    // Delete
+    $('#datatable-buttons').on('click', '.sDeleteRetailGST', function () {
+        const id = $(this).data('id');
+        if (confirm('Are you sure you want to delete this record?')) {
+            $.post('<?php echo base_url(); ?>CommunityCare/deletedata', { id }, function (response) {
+                if (response.status === 'success') {
+                    alert(response.message);
+                    loadTable();
+                } else {
+                    alert(response.message);
+                }
+            }, 'json');
+        }
     });
+});
+
+
 
     function getempdata() {
 
@@ -522,6 +446,7 @@
 
 
             var action = $("#action").val();
+            $('#myModal').modal('hide');
 
             if (action == 'add') {
 
@@ -531,8 +456,8 @@
                     type: 'POST',
                     data: dataToSend,
                     success: function(response) {
-                        alert('Form submitted successfully! Response: ' +
-                            response); // Show the response from PHP (success or error)
+                        alert('Form submitted successfully!'); // Show the response from PHP (success or error)
+                         $('#datatable-buttons').DataTable().ajax.reload();
                     },
                     error: function(xhr, status, error) {
                         console.error("AJAX Error: " + status + ": " + error);
@@ -544,9 +469,9 @@
                     type: 'POST',
                     data: dataToSend,
                     success: function(response) {
-                        alert(
-                            'Data Updated successfully!'
-                        ); // Show the response from PHP (success or error)
+                        alert('Data Updated successfully!'); // Show the response from PHP (success or error)
+                        location.reload();
+
                     },
                     error: function(xhr, status, error) {
                         console.error("AJAX Error: " + status + ": " + error);

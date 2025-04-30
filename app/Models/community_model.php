@@ -31,6 +31,7 @@ class Community_model extends Model {
             'memberid' => makeSafe($this->request->getPost('memberid')),
             'claimno' => makeSafe($this->request->getPost('claimno')),
             'dos' => makeSafe($this->request->getPost('dos')),
+            'createdon'=> date('Y-m-d H:i:s'),
             'createdby' =>  $user_id
         ];
 
@@ -42,14 +43,36 @@ class Community_model extends Model {
 
     }
 
-    public function getdata(){
+    public function getFilteredData($filters = [])
+    {
+    $builder = $this->db->table('community as c');
+    $builder->select('c.id, c.name, c.date, c.pname, c.mname, c.claimno, e.fname, e.lname');
+    $builder->join('employee as e', 'c.createdby = e.user_id', 'left');
 
-        $user_id = $this->session->get('user_id'); // Example key
-        $user_type = $this->session->get('user_type'); // Assuming you store user type in session
+    if (!empty($filters['name'])) {
+        $builder->like('c.name', $filters['name']);
+    }
+    if (!empty($filters['date'])) {
+        $builder->where('c.date', $filters['date']);
+    }
+    if (!empty($filters['pname'])) {
+        $builder->like('c.pname', $filters['pname']);
+    }
+    if (!empty($filters['mname'])) {
+        $builder->like('c.mname', $filters['mname']);
+    }
+    if (!empty($filters['claimno'])) {
+        $builder->like('c.claimno', $filters['claimno']);
+    }
+    if (!empty($filters['createdby'])) {
+        $builder->groupStart()
+                ->like('e.fname', $filters['createdby'])
+                ->orLike('e.lname', $filters['createdby'])
+                ->groupEnd();
+    }
 
-        $sql   ="SELECT `id`, `name`, `date`, `pname`, `mname`, `claimno` FROM `community` WHERE 1";
-        $query = $this->db->query($sql)->getResultArray();
-        return $query; 
+    $builder->orderBy('c.id', 'DESC');
+    return $builder->get()->getResultArray();
     }
 
     public function deletedata()

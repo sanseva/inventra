@@ -38,6 +38,8 @@ class CommunityCare extends BaseController
         //     return view('accessdenied');
         // }
 
+        // $data['community'] = $this->community_model->get_all(); // method to fetch list data
+        // return view('community/list', $data); // load the view with data
 
         return view('communitycare');
     }
@@ -50,25 +52,34 @@ class CommunityCare extends BaseController
     public function getdata()
     {
         header('Content-Type: application/json');
-        $data = $this->community_model->getdata();
-       
-        $i=1;
-        foreach ($data as $row)
-        {
-            $data['0'] = $i;
-            $data['1'] = $row['name'];
-            $data['2'] = $row['date'];
-            $data['3'] = $row['pname'];
-            $data['4'] = $row['mname'];
-            $data['5'] = $row['claimno'];
-            $data['user_id'] = $row['id'];
 
-            $i++;
-            $temp[] = $data;
+        $filters = [
+            'name' => $this->request->getGet('name'),
+            'date' => $this->request->getGet('date'),
+            'pname' => $this->request->getGet('pname'),
+            'mname' => $this->request->getGet('mname'),
+            'claimno' => $this->request->getGet('claimno'),
+            'createdby' => $this->request->getGet('createdby'),
+        ];
+
+        $data = $this->community_model->getFilteredData($filters);
+
+        $output = [];
+        $i = 1;
+        foreach ($data as $row) {
+            $output[] = [
+                '0' => $i++,
+                '1' => $row['name'],
+                '2' => $row['date'],
+                '3' => $row['pname'],
+                '4' => $row['mname'],
+                '5' => $row['claimno'],
+                '6' => $row['fname'] . ' ' . $row['lname'],
+                'user_id' => $row['id']
+            ];
         }
-  
-        echo json_encode(['data' => $temp]);
 
+        echo json_encode(['data' => $output]);
     }
 
     // Delete a shift
@@ -150,8 +161,7 @@ class CommunityCare extends BaseController
 
         $data['data'] = $this->community_model->getcommunitydata($id);    
         $logo_path = 'file://' . realpath(FCPATH . 'assets/images/logo-dark.png');
-
-
+ 
         $data['logo_path'] = $logo_path;
          
         // $html = view('pdf_report'); // You can pass data if needed
@@ -206,12 +216,8 @@ class CommunityCare extends BaseController
         
         $data = $this->community_model->save_excel( $excelData);
         
-        
+        return redirect()->to('/communitycare'); 
         
     }
 
-    
-    
-
-    
 }
