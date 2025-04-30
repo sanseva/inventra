@@ -52,7 +52,6 @@
                                     <div class="mb-0 border-0 p-md-5 p-lg-0 p-4">
                                         <div class="mb-4 p-0 text-center">
                                             <a class='auth-logo' href='<?php echo base_url('Login'); ?>'>
-                                                <!-- <img src="<?php echo base_url();?>assets/i mages/logo-dark.png" alt="logo-dark" class="mx-auto" height="38" /> -->
                                             </a>
                                         </div>
 

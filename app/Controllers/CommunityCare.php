@@ -70,7 +70,7 @@ class CommunityCare extends BaseController
             $output[] = [
                 '0' => $i++,
                 '1' => $row['name'],
-                '2' => $row['date'],
+                '2' => date('m/d/Y', strtotime($row['date'])),
                 '3' => $row['pname'],
                 '4' => $row['mname'],
                 '5' => $row['claimno'],
@@ -99,55 +99,7 @@ class CommunityCare extends BaseController
     { 
         $data = $this->community_model->update_data();
         return $this->response->setJSON($data); 
-    }
- 
-    // inactive users vacant system 
-
-    public function vacantSystem()
-    {
-        $search_code = "VCS-VIEW-04";
- 
-        $codes = array_column($this->permissions, 'code');
- 
-        if (in_array($search_code, $codes))
-        {
-            return view('vacant_system');
-        }
-        else 
-        {
-            return view('accessdenied');
-        }
-
-
-        // return view('vacant_system');
-    }
-
-
-    public function getInactiveempdata()
-    {
-        header('Content-Type: application/json');
-        $data = $this->employee_model->getInactiveempdata();
-
-        $i=1;
-        foreach ($data as $row)
-        {
-            $data['0'] = $i;
-            $data['1'] = $row['desk_no'];
-            $data['2'] = $row['fname'] .' '.$row['lname'];
-            $data['3'] = $row['phone'];
-            $data['4'] = $row['shiftname'];
-            $data['5'] = $row['shift_start'];
-            $data['6'] = $row['shift_end'];
-            $data['user_id'] = $row['user_id'];
-
-            $i++;
-            $temp[] = $data;
-        }
-  
-        echo json_encode(['data' => $temp]);
-
-    }
-
+    }   
 
     public function pdf($userId)
     {
@@ -163,17 +115,18 @@ class CommunityCare extends BaseController
         $logo_path = 'file://' . realpath(FCPATH . 'assets/images/logo-dark.png');
  
         $data['logo_path'] = $logo_path;
-         
-        // $html = view('pdf_report'); // You can pass data if needed
         $html = view('pdf_report', $data);
-
+      
         $dompdf->loadHtml($html);
 
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
         // Output the PDF directly in the browser
-        $dompdf->stream("claim-inquiry.pdf", ["Attachment" => false]); // set true to force download
+        $filename = $data['data']['mname'] . date('Y-m-d', strtotime($data['data']['dos'])) . ".pdf";
+            $dompdf->stream($filename, ["Attachment" => false]);
+        
+
     }
 
     public function download_pdf()

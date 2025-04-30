@@ -1,4 +1,3 @@
-<?php echo"dd";exit; ?>
 <?php $this->session = \Config\Services::session(); ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -105,15 +105,15 @@ $data['logoBase64'] = $logoBase64;
                         </tr>
                         <tr>
                             <td style="border: 1px solid #000; padding: 8px; ">Date:</td>
-                            <td style="border: 1px solid #000; padding: 8px; "><?php echo $data['date'];?></td>
+                            <td style="border: 1px solid #000; padding: 8px; "><?php echo date('m/d/Y', strtotime($data['date'])); ?></td>
                         </tr>
                         <tr>
                             <td style="border: 1px solid #000; padding: 8px;">Phone Number</td>
-                            <td style="border: 1px solid #000; padding: 8px; ">539-296-8257</td>
+                            <td style="border: 1px solid #000; padding: 8px; ">918-935-3240</td>
                         </tr>
                         <tr>
                             <td style="border: 1px solid #000; padding: 8px; ">Fax Number</td>
-                            <td style="border: 1px solid #000; padding: 8px; ">539-279-0742</td>
+                            <td style="border: 1px solid #000; padding: 8px; ">918-935-3241</td>
                         </tr>
                     </table>
                 </td>
@@ -176,7 +176,7 @@ $data['logoBase64'] = $logoBase64;
                         Date of Service :
                     </td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: left;">
-                        <?php echo $data['dos'];?>
+                        <?php echo date('m/d/Y', strtotime($data['dos'])); ?>
                     </td>
                 </tr>
 
@@ -267,13 +267,12 @@ $data['logoBase64'] = $logoBase64;
                 </tr>
                 <tr>
                     <td colspan="3" style="border: 1px solid #000; padding: 8px; text-align: left;">
-                        <b>Please refer to the attached medical records as requested by payer.</b>
+                        <b>Please refer to the attached medical records for the above-mentioned patient's service.</b>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3" style="border: 1px solid #000; padding: 8px; text-align: left;">
-                        <b>Please process this claim as soon as possible and provide us reimbursement for the
-                            services.</b>
+                        <b>Please process this claim as soon as possible and provide us reimbursement for the services.</b>
                     </td>
                 </tr>
                 <tr>

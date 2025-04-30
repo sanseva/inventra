@@ -93,42 +93,4 @@ define('EVENT_PRIORITY_NORMAL', 100);
  */
 define('EVENT_PRIORITY_HIGH', 10);
 
-define('TITLE', 'Salasar-ERP');
-
-//Constant Used For Seneding Mail Of Raised Bill
-define('RAISED_BILL_TO','harshg2@gmail.com');
-// define('RAISED_BILL_CC','shreenaathscs@gmail.com');
-//r.koli@salasarauction.com,
-define('RAISED_BILL_CC','harsh@salasarauction.com');
-define('RAISED_BILL_BCC','sw-dev@salasarserver.com');
-
-/* auction server url for sending and email */
-/* define('AUCTION_SERVER_NAME','https://salasarauction.com'); */
-define('AUCTION_SERVER_NAME','https://salasarauction.com');
-
-//Constant Used For Seneding Unclear OR Pending Bill Details
-define('PENDING_BILL_TO','r.koli@salasarauction.com');
-// define('PENDING_BILL_CC','harshg2@gmail.com,ekta.aonesalsar@gmail.com,sales@salasarauction.com,r.koli@oya.auction');
-define('PENDING_BILL_CC','harshg2@gmail.com,harsh@salasarauction.com,ekta.aonesalsar@gmail.com,sales@salasarauction.com,r.koli@oya.auction,tanmay@salasarauction.com,kamalesh.bhatt@salasarauction.com');
-define('PENDING_BILL_BCC','sw-dev@salasarserver.com');
-
-//Constant Used For Sending Mail While Update/Create Work Order For Approve/Reject Work Order
-
-define('WORK_ORDER_TO','sw-dev@salasarserver.com');
-
-//Constant Used For Seneding Mail Of Threshold Level Reached Work Orders
-define('W_TO','bantug2backup@gmail.com');
-define('W_CC','bantug2backup@gmail.com');
-define('W_BCC','sw-dev@salasarserver.com');
-
-//Constant Used while Sending Mail Of Monthly Work Order Bill To Be generate
-
-define('W_BILL_TO','bantug2backup@gmail.com');
-define('W_BILL_CC','bantug2backup@gmail.com'); 
-define('W_BILL_BCC','sw-dev@salasarserver.com');
-
-//Constant Used For Seneding Unclear OR Pending Bill Details
-define('OTHER_PENDING_BILL_TO','system.enterprise@gmail.com');
-// define('OTHER_PENDING_BILL_CC','harshg2@gmail.com,bantug2@gmail.com');
-define('OTHER_PENDING_BILL_CC','harshg2@gmail.com,harsh@salasarauction.com,bantug2@gmail.com');
-define('OTHER_PENDING_BILL_BCC','suraj.pandey@salasarauction.com');
+define('TITLE', 'SEVA-ERP');

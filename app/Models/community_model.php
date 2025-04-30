@@ -136,20 +136,6 @@ class Community_model extends Model {
 
     }
 
-    public function getInactiveempdata() 
-    {
-        $sql   ="SELECT user_id,fname,phone,lname,shiftname,email_id,shift_start,shift_end,is_active,desk_no FROM employee where is_active = 'N' ";
-        $query = $this->db->query($sql)->getResultArray();
-        return $query; 
-    }
-     
-    public function getactiveemp() 
-    {
-        $sql   ="SELECT user_id,fname,phone,lname,shiftname,email_id,shift_start,shift_end,is_active,desk_no FROM employee where is_active = 'Y' ";
-        $query = $this->db->query($sql)->getResultArray();
-        return $query; 
-    }
-    
     public function getcommunitydata($id) 
     {
         $sql   ="SELECT `id`, `name`, `date`, `pname`, `taxno`, `mname`, `memberid`, `claimno`, `dos`, `createdon`, `createdby`, `updatedon`, `updateby` FROM `community` WHERE id = ".$id;
@@ -191,6 +177,7 @@ class Community_model extends Model {
                     'memberid' => $row[5],
                     'claimno' => $row[6],
                     'dos' => $date1,
+                    'createdby' =>  $user_id
                    
                 ];
 
@@ -201,7 +188,6 @@ class Community_model extends Model {
 
             }
             
-
 
         
 
