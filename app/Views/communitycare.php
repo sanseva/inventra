@@ -384,10 +384,37 @@
                     data: null,
                     render: function (data, type, row) {
                         let buttons = '';
-                        buttons += `<a class="btn btn-success btn-xs" onclick="edit(${row.user_id})"><i class="fa fa-pencil"></i></a>`;
-                        buttons += `<a class="sDeleteRetailGST btn btn-danger btn-xs" data-id="${row.user_id}" href="#"><i class="fa fa-times"></i></a>`;
-                        buttons += `<a class="print btn btn-danger btn-xs" data-id="${row.user_id}" target="_blank" href="<?php echo base_url('CommunityCare/pdf'); ?>"><i class="fa fa-eye"></i></a>`;
+
+                        <?php  
+                        $editPermission  = "TIC-EDIT-02";
+                        $delPermission   = "TIC-DEL-03";
+                        $codes = array_column($this->permissions, 'code'); 
+
+                        if (in_array($editPermission, $codes))
+                        { ?>
+                        buttons += '<a class="btn btn-success btn-xs"  onclick="edit(' + row
+                            .user_id + ')"><i class="fa fa-pencil"></i></a>';
+                        <?php }  
+
+                        if (in_array($delPermission, $codes))
+                        { ?>
+                        buttons +=
+                            '&nbsp<a id="sDeleteRetailGST" class="sDeleteRetailGST btn btn-danger btn-xs" data-id="' +
+                            row.user_id + '" href="#"><i class="fa fa-times"></i></a>';
+                        <?php }  if (in_array($delPermission, $codes))
+                        { ?>
+
+
+                        buttons +=
+                            '&nbsp<a id="print" class="print btn btn-primary btn-xs" data-id="' +
+                            row.user_id +
+                            '" target="_blank" href="<?php echo base_url('CommunityCare/pdf'); ?>/' +
+                            row.user_id + '"><i class="fa fa-eye"></i></a>';
+                        <?php } ?>
+
                         return buttons;
+
+                        
                     }
                 }
             ]
