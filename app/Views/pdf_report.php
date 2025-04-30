@@ -1,9 +1,18 @@
 <?php 
-
-// echo FCPATH . 'assets\images\logo-dark.png' ;exit;
+ 
 require 'vendor/autoload.php'; // if using composer
 use Dompdf\Dompdf;
 
+$imagePath = FCPATH . 'assets/images/Capture.PNG';
+
+if (file_exists($imagePath)) {
+    $imageData = base64_encode(file_get_contents($imagePath));
+    $logoBase64 = 'data:image/PNG;base64,' . $imageData;
+} else {
+    $logoBase64 = '';
+}
+
+$data['logoBase64'] = $logoBase64;
 
  
 ?>
@@ -59,10 +68,13 @@ use Dompdf\Dompdf;
 </head>
 
 <body>
- 
+
     <div class="container">
-        <div class="text-center" style="margin-bottom:-30px;"> 
-            <img src="<?=  $logo_path; ?>" style="height: 40px;" alt="CommunityCare Logo">
+        <?php if (!empty($logoBase64)): ?>
+            <img src="<?= $logoBase64 ?>" style="height: 45px; margin-bottom:-20px;" alt="CommunityCare Logo">
+        <?php endif; ?>
+        <div class="text-center" style="margin-bottom:-30px;">
+
             <div class="title"> <b>Request for Claim Inquiry</b> </div>
         </div>
         <hr>
@@ -77,9 +89,9 @@ use Dompdf\Dompdf;
                         Submit this form with all supporting documentation to:
                     </p>
                     <p style="margin-top: -15px; padding-left:40px;">
-                            CommunityCare<br>
-                            PO Box 3249<br>
-                            Tulsa, OK 74101-3249<br>
+                        CommunityCare<br>
+                        PO Box 3249<br>
+                        Tulsa, OK 74101-3249<br>
                     </p>
                     <p style="margin-top:-8px; "> Fax: 918-879-4357</p>
                 </td>
@@ -97,11 +109,11 @@ use Dompdf\Dompdf;
                         </tr>
                         <tr>
                             <td style="border: 1px solid #000; padding: 8px;">Phone Number</td>
-                            <td style="border: 1px solid #000; padding: 8px; "><?php echo $data['date'];?></td>
+                            <td style="border: 1px solid #000; padding: 8px; ">539-296-8257</td>
                         </tr>
                         <tr>
                             <td style="border: 1px solid #000; padding: 8px; ">Fax Number</td>
-                            <td style="border: 1px solid #000; padding: 8px; "><?php echo $data['taxno'];?></td>
+                            <td style="border: 1px solid #000; padding: 8px; ">539-279-0742</td>
                         </tr>
                     </table>
                 </td>
@@ -144,13 +156,13 @@ use Dompdf\Dompdf;
                         Member Name :
                     </td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: left;">
-                        <?php echo $data['mname'];?>        
+                        <?php echo $data['mname'];?>
                     </td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: left;">
                         Member ID :
                     </td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: left;">
-                        <?php echo $data['memberid'];?>       
+                        <?php echo $data['memberid'];?>
                     </td>
                 </tr>
                 <tr>
@@ -158,26 +170,26 @@ use Dompdf\Dompdf;
                         Claim Number :
                     </td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: left;">
-                        <?php echo $data['claimno'];?>           
+                        <?php echo $data['claimno'];?>
                     </td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: left;">
                         Date of Service :
                     </td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: left;">
-                        <?php echo $data['dos'];?>         
+                        <?php echo $data['dos'];?>
                     </td>
                 </tr>
 
             </table>
         </div>
-        
+
         <div style=" margin-top: -8px; ">
             <p>
-            Reason for request (please check one and provide explanation):
+                Reason for request (please check one and provide explanation):
             </p>
 
         </div>
- 
+
         <div class="row" style=" margin-top: -9px; ">
             <table
                 style="width: 100%; border-collapse: collapse; border: 1px solid #000; font-family: Arial, sans-serif; font-size: 14px;">
@@ -185,7 +197,7 @@ use Dompdf\Dompdf;
                 <tr>
                     <td style="border: 1px solid #000; padding: 8px;">
                         <label style="display: flex; align-items: center;">
-                            <input type="checkbox"   style="margin-right: 8px;"> Authorization
+                            <input type="checkbox" style="margin-right: 8px;"> Authorization
                         </label>
                     </td>
                     <td style="border: 1px solid #000; padding: 8px;">
@@ -195,12 +207,12 @@ use Dompdf\Dompdf;
                     </td>
                     <td style="border: 1px solid #000; padding: 8px;">
                         <label style="display: flex; align-items: center;">
-                            <input type="checkbox"   style="margin-right: 8px;"> Benefits
+                            <input type="checkbox" style="margin-right: 8px;"> Benefits
                         </label>
                     </td>
                     <td style="border: 1px solid #000; padding: 8px;">
                         <label style="display: flex; align-items: center;">
-                            <input type="checkbox"   style="margin-right: 8px;"> Timely filing
+                            <input type="checkbox" style="margin-right: 8px;"> Timely filing
                         </label>
                     </td>
                 </tr>
@@ -214,7 +226,7 @@ use Dompdf\Dompdf;
                     </td>
                     <td style="border: 1px solid #000; padding: 8px;">
                         <label style="display: flex; align-items: center;">
-                            <input type="checkbox"  style="margin-right: 8px;"> Recoupment
+                            <input type="checkbox" style="margin-right: 8px;"> Recoupment
                         </label>
                     </td>
                     <td style="border: 1px solid #000; padding: 8px;">
@@ -228,7 +240,7 @@ use Dompdf\Dompdf;
                         </label>
                     </td>
                 </tr>
- 
+
                 <tr>
                     <td colspan="4" style="border: 1px solid #000; padding: 8px;">
                         <label style="display: flex; align-items: center;">
