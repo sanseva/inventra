@@ -502,8 +502,9 @@
                 $("#idd").val(response[0].id);
                 $("#is_active").val(response[0].is_active);
 
-                var myModal = new bootstrap.Modal(document.getElementById('myModal'));
-                myModal.show(); // Show the modal
+                // var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+                // myModal.show(); // Show the modal
+                $('#myModal').modal('show');
             },
             error: function(xhr, status, error) {
                 console.error("AJAX Error: " + status + ": " + error);

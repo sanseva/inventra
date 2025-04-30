@@ -469,9 +469,9 @@
                         $("#action").val('update');
                         $("#idd").val(response[0].smid);
 
-                        var myModal = new bootstrap.Modal(document.getElementById('myModal'));
-                        myModal.show(); // Show the modal
-                        
+                        // var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+                        // myModal.show(); // Show the modal
+                        $('#myModal').modal('show');
 
                 },
                 error: function(xhr, status, error) {

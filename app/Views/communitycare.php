@@ -177,7 +177,7 @@
                 </div><!-- /.modal-dialog -->
             </div>
 
-            <div class="modal fade upload-excel" id="myModal" tabindex="-1" role="dialog"
+            <div class="modal fade upload-excel" id="myModalS" tabindex="-1" role="dialog"
                 aria-labelledby="mySmallModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -535,8 +535,11 @@
                 $("#claimno").val(response[0].claimno);
                 $("#dos").val(response[0].dos);
 
-                var myModal = new bootstrap.Modal(document.getElementById('myModal'));
-                myModal.show(); // Show the modal
+                // var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+                // myModal.show(); // Show the modal
+                $('#myModal').modal('show'); // jQuery-based Bootstrap 4/5
+
+                
             },
             error: function(xhr, status, error) {
                 console.error("AJAX Error: " + status + ": " + error);
